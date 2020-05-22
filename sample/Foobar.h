@@ -1,11 +1,11 @@
 #ifndef FOOBAR_H
 #define FOOBAR_H
 
-#include <EventListener.h>
+#include <EventsListener.h>
 
 #include <iostream>
 
-class Foobar : public EventListener<int, float> {
+class Foobar : public EventsListener<int, float> {
  public:
   Foobar() = default;
   ~Foobar() = default;

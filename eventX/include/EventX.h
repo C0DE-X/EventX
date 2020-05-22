@@ -1,20 +1,19 @@
 #ifndef EVENTX_H
 #define EVENTX_H
 
+#include <EventBus.h>
 #include <EventX_globals.h>
-#include <atomic>
 
-class EVENTX_EXPORT EventX
-{
-public:
-    EventX() = default;
-    ~EventX() = default;
+class EVENTX_EXPORT EventX {
+ public:
+  static EventX& instance();
+  ~EventX() = default;
 
-    void exec();
-    void stop();
+  EventBus* eventBus();
 
-private:
-    std::atomic_bool m_x { false };
+ private:
+  EventX() = default;
+  EventBus m_eventBus;
 };
 
-#endif // EVENTX_H
+#endif  // EVENTX_H
