@@ -12,7 +12,6 @@ public:
 
     void exec();
     void stop();
-    void test();
 
 private:
     std::atomic_bool m_x { false };

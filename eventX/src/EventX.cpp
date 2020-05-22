@@ -20,8 +20,3 @@ void EventX::stop()
 {
     m_x.store(false);
 }
-
-void EventX::test()
-{
-    std::cout<<"TEST\n";
-}

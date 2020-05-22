@@ -10,6 +10,8 @@ add_library(eventX SHARED
   src/EventX.cpp
   include/EventX.h
   include/EventX_globals.h
+  include/Event.h
+  include/EventListener.h
 )
 
 target_include_directories(eventX PRIVATE .)
