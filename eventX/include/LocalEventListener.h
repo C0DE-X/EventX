@@ -12,7 +12,7 @@ class LocalEventListener;
 template <typename T>
 class LocalEventListener<T> : public EventListener<T> {
  public:
-  LocalEventListener() {}
+  LocalEventListener(EventBus* bus) : EventListener<T>(bus) {}
   virtual ~LocalEventListener() = default;
 
   void setEventCall(std::function<void(std::shared_ptr<T>)> call) {
@@ -31,7 +31,7 @@ template <typename T0, typename... T>
 class LocalEventListener : public EventListener<T0>,
                            public LocalEventListener<T...> {
  public:
-  LocalEventListener() {}
+  LocalEventListener(EventBus* bus) : EventListener<T0>(bus) {}
   ~LocalEventListener() override = default;
 
   void setEventCall(std::function<void(std::shared_ptr<T0>)> call) {

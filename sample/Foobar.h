@@ -1,21 +1,32 @@
 #ifndef FOOBAR_H
 #define FOOBAR_H
 
-#include <EventsListener.h>
+#include <EventListener.h>
 
 #include <iostream>
 
-class Foobar : public EventsListener<int, float> {
+#include "TestEvent.h"
+
+class Foobar : public EventListener<Event> {
  public:
-  Foobar() = default;
+  Foobar(EventBus* bus) : EventListener<Event>(bus) {}
   ~Foobar() = default;
 
-  void onEvent(std::shared_ptr<int> event) override {
-    std::cout << "received int event with " << *event << std::endl;
+  void onEvent(std::shared_ptr<Event> event) override {
+    std::cout << "received event with " << event.get() << std::endl;
   }
+};
 
-  void onEvent(std::shared_ptr<float> event) override {
-    std::cout << "received float event with " << *event << std::endl;
+class Bar : public EventListener<Event, TestEvent> {
+ public:
+  Bar(EventBus* bus) : EventListener<Event, TestEvent>(bus) {}
+  ~Bar() = default;
+
+  void onEvent(std::shared_ptr<Event> event) override {
+    std::cout << "received event with " << event.get() << std::endl;
+  }
+  void onEvent(std::shared_ptr<TestEvent> event) override {
+    std::cout << "received testevent with " << event.get() << std::endl;
   }
 };
 

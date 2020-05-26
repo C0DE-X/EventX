@@ -1,36 +1,35 @@
-#include <EventX.h>
+#include <EventBus.h>
 #include <LocalEventListener.h>
 
 #include <iostream>
+#include <thread>
 
 #include "Foobar.h"
+#include "TestEvent.h"
 
 int main() {
-  std::cout << "Hello World!" << std::endl;
+  std::cout << "Start...\n" << std::endl;
 
-  Foobar foo;
-  LocalEventListener<int, float> ll;
-  ll.setEventCall([](std::shared_ptr<int> i) {
-    std::cout << "local catch int " << *i << std::endl;
+  EventBus eventBus;
+  Foobar foo(&eventBus);
+  Bar bar(&eventBus);
+  LocalEventListener<TestEvent> ll(&eventBus);
+  ll.setEventCall([](std::shared_ptr<TestEvent> event) {
+    std::cout << "locally testevent received " << event << std::endl;
   });
-  ll.setEventCall([](std::shared_ptr<float> i) {
-    std::cout << "local catch float " << *i << std::endl;
+
+  std::thread t([&eventBus]() {
+    std::cout << "Press ENTER to stop\n";
+    std::cin.ignore();
+    eventBus.stop();
   });
 
-  EventListener<int>* eli = &foo;
-  EventListener<float>* elf = &foo;
+  eventBus.push(std::make_shared<TestEvent>());
+  eventBus.push(std::make_shared<Event>());
+  eventBus.exec();
 
-  auto i = std::make_shared<int>(int(5));
-  auto f = std::make_shared<float>(float(43.5f));
-
-  eli->onEvent(i);
-  elf->onEvent(f);
-
-  eli = &ll;
-  elf = &ll;
-
-  eli->onEvent(i);
-  elf->onEvent(f);
+  t.join();
+  std::cout << "...end\n";
 
   return 0;
 }

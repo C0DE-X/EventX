@@ -1,15 +1,28 @@
 #ifndef EVENTLISTENER_H
 #define EVENTLISTENER_H
 
-#include <memory>
+#include <EventBus.h>
+
+template <typename T0, typename... T>
+class EventListener;
 
 template <typename T>
-class EventListener {
+class EventListener<T> : public EventBus::Listener<T> {
  public:
-  EventListener() {}
-  virtual ~EventListener() = default;
+  EventListener(EventBus* bus) : EventBus::Listener<T>(bus) {}
+  ~EventListener() override = default;
 
-  virtual void onEvent(std::shared_ptr<T>) {}
+  virtual void onEvent(std::shared_ptr<T>) override {}
+};
+
+template <typename T0, typename... T>
+class EventListener : public EventListener<T0>, public EventListener<T...> {
+ public:
+  EventListener(EventBus* bus)
+      : EventListener<T0>(bus), EventListener<T...>(bus) {}
+  ~EventListener() override = default;
+
+  void onEvent(std::shared_ptr<T0>) override {}
 };
 
 #endif  // EVENTLISTENER_H
