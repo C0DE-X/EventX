@@ -6,6 +6,8 @@
 #include <functional>
 #include <type_traits>
 
+namespace eventX {
+
 template <typename T0, typename... T>
 class LocalEventListener;
 
@@ -46,5 +48,7 @@ class LocalEventListener : public EventListener<T0>,
  private:
   std::function<void(std::shared_ptr<T0>)> m_callback;
 };
+
+}  // namespace eventX
 
 #endif  // LOCALEVENTLISTENER_H

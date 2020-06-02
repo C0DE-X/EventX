@@ -4,13 +4,13 @@
 #include <Event.h>
 #include <EventBus.h>
 
-class TestEvent : public Event {
+class TestEvent : public eventX::Event {
  public:
-  TestEvent() : Event() {}
+  TestEvent() : eventX::Event() {}
   ~TestEvent() override = default;
 
-  Event::Type getType() override {
-    return Type::fromEvent(this) + Event::getType();
+  eventX::Event::Type getType() override {
+    return Type::fromEvent(this) + eventX::Event::getType();
   }
 };
 

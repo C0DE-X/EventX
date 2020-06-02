@@ -10,11 +10,11 @@
 int main() {
   std::cout << "Start...\n" << std::endl;
 
-  EventBus eventBus;
-  EventBus eventBus1;
+  eventX::EventBus eventBus;
+  eventX::EventBus eventBus1;
   Foobar foo(&eventBus);
   Bar bar(&eventBus1);
-  LocalEventListener<TestEvent> ll(&eventBus1);
+  eventX::LocalEventListener<TestEvent> ll(&eventBus1);
   ll.setEventCall([](std::shared_ptr<TestEvent> event) {
     std::cout << "locally testevent received " << event << std::endl;
   });
@@ -29,8 +29,8 @@ int main() {
   std::thread et([&eventBus1]() { eventBus1.exec(); });
 
   eventBus.push(std::make_shared<TestEvent>());
-  eventBus.push(std::make_shared<Event>());
-  eventBus1.push(std::make_shared<Event>());
+  eventBus.push(std::make_shared<eventX::Event>());
+  eventBus1.push(std::make_shared<eventX::Event>());
   eventBus1.push(std::make_shared<TestEvent>());
   eventBus.exec();
 

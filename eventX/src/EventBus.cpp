@@ -2,6 +2,8 @@
 
 #include <thread>
 
+namespace eventX {
+
 EventBus::~EventBus() {
   for (auto dispatcher : m_dispatchers) {
     delete dispatcher.second;
@@ -44,3 +46,5 @@ void EventBus::exec() {
 }
 
 void EventBus::stop() { m_running.store(false); }
+
+}  // namespace eventX

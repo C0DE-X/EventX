@@ -6,6 +6,8 @@
 #include <typeindex>
 #include <vector>
 
+namespace eventX {
+
 class Event {
  public:
   class Type {
@@ -36,10 +38,16 @@ class Event {
     std::vector<std::type_index> m_types;
   };
 
-  Event() = default;
+  Event(std::string const& id = std::string());
   virtual ~Event() = default;
 
   virtual Event::Type getType();
+  std::string getId() const;
+
+ private:
+  std::string m_id;
 };
+
+}  // namespace eventX
 
 #endif  // EVENT_H

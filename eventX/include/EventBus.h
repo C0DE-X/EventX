@@ -11,6 +11,8 @@
 #include <queue>
 #include <typeindex>
 
+namespace eventX {
+
 class EventBus {
   template <typename EVENT>
   friend class Listener;
@@ -131,5 +133,7 @@ void EventBus::removeListener(EventBus::Listener<EVENT>* l) {
     dispatcher->removeEventListener(l);
   m_dispatcherMutex.unlock();
 }
+
+}  // namespace eventX
 
 #endif  // EVENTBUS_H

@@ -3,6 +3,8 @@
 
 #include <EventBus.h>
 
+namespace eventX {
+
 template <typename T0, typename... T>
 class EventListener;
 
@@ -24,5 +26,7 @@ class EventListener : public EventListener<T0>, public EventListener<T...> {
 
   void onEvent(std::shared_ptr<T0>) override {}
 };
+
+}  // namespace eventX
 
 #endif  // EVENTLISTENER_H

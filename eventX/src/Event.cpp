@@ -2,7 +2,13 @@
 
 #include <algorithm>
 
+namespace eventX {
+
+Event::Event(const std::string &id) : m_id(id) {}
+
 Event::Type Event::getType() { return Type::fromEvent(this); }
+
+std::string Event::getId() const { return m_id; }
 
 Event::Type::Type(const std::type_index &type) : m_types({type}) {}
 
@@ -50,3 +56,5 @@ std::vector<std::type_index>::iterator Event::Type::begin() {
 std::vector<std::type_index>::iterator Event::Type::end() {
   return m_types.end();
 }
+
+}  // namespace eventX
