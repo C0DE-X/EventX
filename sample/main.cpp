@@ -1,5 +1,6 @@
 #include <EventBus.h>
 #include <LocalEventListener.h>
+#include <Timer.h>
 
 #include <iostream>
 #include <thread>
@@ -15,9 +16,19 @@ int main() {
   Foobar foo(&eventBus);
   Bar bar(&eventBus1);
   eventX::LocalEventListener<TestEvent> ll(&eventBus1);
+  eventX::Timer timer;
+
   ll.setEventCall([](std::shared_ptr<TestEvent> event) {
-    std::cout << "locally testevent received " << event << std::endl;
+    std::cout << "locally testevent received " << event.get() << " in "
+              << std::this_thread::get_id() << std::endl;
   });
+
+  timer.setTimeout(
+      [&eventBus]() {
+        std::cout << "Timmer got triggered!\n";
+        eventBus.push(std::make_shared<TestEvent>());
+      },
+      std::chrono::seconds(3), 5);
 
   std::thread t([&eventBus, &eventBus1]() {
     std::cout << "Press ENTER to stop\n";
@@ -25,6 +36,8 @@ int main() {
     eventBus.stop();
     eventBus1.stop();
   });
+
+  timer.start();
 
   std::thread et([&eventBus1]() { eventBus1.exec(); });
 

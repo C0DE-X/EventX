@@ -9,11 +9,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_library(eventX SHARED
   src/Event.cpp
   src/EventBus.cpp
+  src/Timer.cpp
   include/Event.h
   include/EventBus.h
   include/EventListener.h
   include/LocalEventListener.h
   include/Lockable.h
+  include/Timer.h
 )
 
 target_include_directories(eventX PRIVATE .)

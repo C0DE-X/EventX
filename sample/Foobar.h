@@ -13,7 +13,8 @@ class Foobar : public eventX::EventListener<eventX::Event> {
   ~Foobar() = default;
 
   void onEvent(std::shared_ptr<eventX::Event> event) override {
-    std::cout << "foobar received event with " << event.get() << std::endl;
+    std::cout << "foobar received event with " << event.get() << " in "
+              << std::this_thread::get_id() << std::endl;
   }
 };
 
@@ -24,10 +25,12 @@ class Bar : public eventX::EventListener<eventX::Event, TestEvent> {
   ~Bar() = default;
 
   void onEvent(std::shared_ptr<eventX::Event> event) override {
-    std::cout << "bar received event with " << event.get() << std::endl;
+    std::cout << "bar received event with " << event.get() << " in "
+              << std::this_thread::get_id() << std::endl;
   }
   void onEvent(std::shared_ptr<TestEvent> event) override {
-    std::cout << "bar received testevent with " << event.get() << std::endl;
+    std::cout << "bar received testevent with " << event.get() << " in "
+              << std::this_thread::get_id() << std::endl;
   }
 };
 
