@@ -5,35 +5,35 @@
 namespace eventX {
 
 EventBus::~EventBus() {
-  for (auto dispatcher : m_dispatchers) {
+  for (auto dispatcher : m_dispatchers.get()) {
     delete dispatcher.second;
   }
 }
 
 void EventBus::push(std::shared_ptr<Event> event) {
-  m_eventMutex.lock();
-  m_eventQueue.push(event);
-  m_eventMutex.unlock();
+  m_eventQueue.lock();
+  m_eventQueue->push(event);
+  m_eventQueue.unlock();
 }
 
 void EventBus::processEvents() {
-  m_eventMutex.lock();
-  if (!m_eventQueue.empty()) {
-    auto event = m_eventQueue.front();
-    m_eventQueue.pop();
-    m_eventMutex.unlock();
+  m_eventQueue.lock();
+  if (!m_eventQueue->empty()) {
+    auto event = m_eventQueue->front();
+    m_eventQueue->pop();
+    m_eventQueue.unlock();
     auto eventType = event->getType();
     for (auto type : eventType) {
-      m_dispatcherMutex.lock();
-      auto found = m_dispatchers.find(type);
-      if (found != m_dispatchers.end()) {
-        m_dispatcherMutex.unlock();
+      m_dispatchers.lock();
+      auto found = m_dispatchers->find(type);
+      if (found != m_dispatchers->end()) {
+        m_dispatchers.unlock();
         found->second->dispatch(event);
       } else
-        m_dispatcherMutex.unlock();
+        m_dispatchers.unlock();
     }
   } else
-    m_eventMutex.unlock();
+    m_eventQueue.unlock();
 }
 
 void EventBus::exec() {

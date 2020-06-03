@@ -13,6 +13,7 @@ add_library(eventX SHARED
   include/EventBus.h
   include/EventListener.h
   include/LocalEventListener.h
+  include/Lockable.h
 )
 
 target_include_directories(eventX PRIVATE .)
