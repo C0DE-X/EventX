@@ -16,7 +16,7 @@ class Timer {
   ~Timer();
 
   void setTimeout(std::function<void()> const& func,
-                  std::chrono::duration<double> const& timeout,
+                  std::chrono::milliseconds const& timeout,
                   int triggercount = INFINITE);
 
   void start();

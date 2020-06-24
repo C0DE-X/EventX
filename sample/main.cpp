@@ -1,20 +1,57 @@
+#include <iostream>
+#include <thread>
+
 #include <EventBus.h>
 #include <LocalEventListener.h>
 #include <Timer.h>
 
-#include <iostream>
-#include <thread>
+class TestEvent : public eventX::Event {
+public:
+  TestEvent() : eventX::Event() {}
+  ~TestEvent() override = default;
 
-#include "Foobar.h"
-#include "TestEvent.h"
+  eventX::Event::Type getType() override {
+    return Type::fromEvent(this) + eventX::Event::getType();
+  }
+};
+
+class Testlistener1 : public eventX::EventListener<eventX::Event> {
+public:
+  Testlistener1(eventX::EventBus *bus)
+      : eventX::EventListener<eventX::Event>(bus) {}
+  ~Testlistener1() = default;
+
+  void onEvent(std::shared_ptr<eventX::Event> event) override {
+    std::cout << "foobar received event with " << event.get() << " in "
+              << std::this_thread::get_id() << std::endl;
+  }
+};
+
+class Testlistener2 : public eventX::EventListener<eventX::Event, TestEvent> {
+public:
+  Testlistener2(eventX::EventBus *bus)
+      : eventX::EventListener<eventX::Event, TestEvent>(bus) {}
+  ~Testlistener2() = default;
+
+  void onEvent(std::shared_ptr<eventX::Event> event) override {
+    std::cout << "bar received event with " << event.get() << " in "
+              << std::this_thread::get_id() << std::endl;
+  }
+  void onEvent(std::shared_ptr<TestEvent> event) override {
+    std::cout << "bar received testevent with " << event.get() << " in "
+              << std::this_thread::get_id() << std::endl;
+  }
+};
 
 int main() {
   std::cout << "Start...\n" << std::endl;
 
   eventX::EventBus eventBus;
   eventX::EventBus eventBus1;
-  Foobar foo(&eventBus);
-  Bar bar(&eventBus1);
+
+  Testlistener1 l1(&eventBus);
+  Testlistener2 l2(&eventBus1);
+
   eventX::LocalEventListener<TestEvent> ll(&eventBus1);
   eventX::Timer timer;
 
@@ -41,8 +78,8 @@ int main() {
 
   std::thread et([&eventBus1]() { eventBus1.exec(); });
 
-  eventBus.push(std::make_shared<TestEvent>());
   eventBus.push(std::make_shared<eventX::Event>());
+  eventBus.push(std::make_shared<TestEvent>());
   eventBus1.push(std::make_shared<eventX::Event>());
   eventBus1.push(std::make_shared<TestEvent>());
   eventBus.exec();

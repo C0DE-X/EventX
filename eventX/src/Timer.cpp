@@ -5,7 +5,7 @@ namespace eventX {
 Timer::~Timer() { stop(); }
 
 void Timer::setTimeout(const std::function<void()> &func,
-                       const std::chrono::duration<double> &timeout,
+                       const std::chrono::milliseconds &timeout,
                        int triggercount) {
   stop();
   if (m_res.valid()) m_res.wait();

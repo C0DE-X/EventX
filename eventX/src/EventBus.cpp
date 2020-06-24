@@ -16,9 +16,9 @@ void EventBus::push(std::shared_ptr<Event> event) {
   m_eventQueue.unlock();
 }
 
-void EventBus::processEvents() {
+void EventBus::processEvent(short maxCount) {
   m_eventQueue.lock();
-  if (!m_eventQueue->empty()) {
+  while (!m_eventQueue->empty() && maxCount-- > 0) {
     auto event = m_eventQueue->front();
     m_eventQueue->pop();
     m_eventQueue.unlock();
@@ -32,14 +32,15 @@ void EventBus::processEvents() {
       } else
         m_dispatchers.unlock();
     }
-  } else
-    m_eventQueue.unlock();
+    m_eventQueue.lock();
+  }
+  m_eventQueue.unlock();
 }
 
 void EventBus::exec() {
   m_running = true;
   while (m_running) {
-    processEvents();
+    processEvent();
     std::this_thread::yield();
     std::this_thread::sleep_for(std::chrono::milliseconds(1));
   }
@@ -47,4 +48,4 @@ void EventBus::exec() {
 
 void EventBus::stop() { m_running.store(false); }
 
-}  // namespace eventX
+} // namespace eventX

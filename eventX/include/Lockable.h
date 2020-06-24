@@ -5,28 +5,25 @@
 
 namespace eventX {
 
-template <typename T>
-class Lockable {
- public:
-  template <typename... ARGS>
-  Lockable(ARGS... args) : m_obj(args...) {}
+template <typename T> class Lockable {
+public:
+  template <typename... ARGS> Lockable(ARGS... args) : m_obj(args...) {}
   ~Lockable() = default;
 
   void lock() { m_lock.lock(); }
   bool tryLock() { return m_lock.try_lock(); }
   void unlock() { m_lock.unlock(); }
 
-  T* operator->() { return &m_obj; }
-  T& get() { return m_obj; }
+  T *operator->() { return &m_obj; }
+  T &get() { return m_obj; }
 
- private:
+private:
   T m_obj;
   mutable std::recursive_mutex m_lock;
 };
 
-template <>
-class Lockable<void> {
- public:
+template <> class Lockable<void> {
+public:
   Lockable() = default;
   ~Lockable() = default;
 
@@ -34,10 +31,10 @@ class Lockable<void> {
   bool tryLock() { return m_lock.try_lock(); }
   void unlock() { m_lock.unlock(); }
 
- private:
+private:
   mutable std::recursive_mutex m_lock;
 };
 
-}  // namespace eventX
+} // namespace eventX
 
-#endif  // LOCKABLE_H
+#endif // LOCKABLE_H

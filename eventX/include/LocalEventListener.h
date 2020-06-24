@@ -8,32 +8,33 @@
 
 namespace eventX {
 
-template <typename T0, typename... T>
-class LocalEventListener;
+template <typename T0, typename... T> class LocalEventListener;
 
-template <typename T>
-class LocalEventListener<T> : public EventListener<T> {
- public:
-  LocalEventListener(EventBus* bus) : EventListener<T>(bus) {}
+template <typename T> class LocalEventListener<T> : public EventListener<T> {
+public:
+  LocalEventListener(EventBus *bus) : EventListener<T>(bus) {}
+  LocalEventListener(EventBus *bus, std::function<void(std::shared_ptr<T>)> cb)
+      : EventListener<T>(bus), m_callback(cb) {}
   virtual ~LocalEventListener() = default;
 
-  void setEventCall(std::function<void(std::shared_ptr<T>)> call) {
-    m_callback = call;
+  void setEventCall(std::function<void(std::shared_ptr<T>)> cb) {
+    m_callback = cb;
   }
 
   virtual void onEvent(std::shared_ptr<T> event) override {
-    if (m_callback) m_callback(event);
+    if (m_callback)
+      m_callback(event);
   }
 
- private:
+private:
   std::function<void(std::shared_ptr<T>)> m_callback;
 };
 
 template <typename T0, typename... T>
 class LocalEventListener : public EventListener<T0>,
                            public LocalEventListener<T...> {
- public:
-  LocalEventListener(EventBus* bus) : EventListener<T0>(bus) {}
+public:
+  LocalEventListener(EventBus *bus) : EventListener<T0>(bus) {}
   ~LocalEventListener() override = default;
 
   void setEventCall(std::function<void(std::shared_ptr<T0>)> call) {
@@ -42,13 +43,14 @@ class LocalEventListener : public EventListener<T0>,
   using LocalEventListener<T...>::setEventCall;
 
   virtual void onEvent(std::shared_ptr<T0> event) override {
-    if (m_callback) m_callback(event);
+    if (m_callback)
+      m_callback(event);
   }
 
- private:
+private:
   std::function<void(std::shared_ptr<T0>)> m_callback;
 };
 
-}  // namespace eventX
+} // namespace eventX
 
-#endif  // LOCALEVENTLISTENER_H
+#endif // LOCALEVENTLISTENER_H

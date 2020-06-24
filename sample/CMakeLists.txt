@@ -11,8 +11,6 @@ link_directories(${CMAKE_SOURCE_DIR}/../eventX/lib)
 
 add_executable(sample
     main.cpp
-    Foobar.h
-    TestEvent.h
 )
 
 target_link_libraries(sample eventX)
