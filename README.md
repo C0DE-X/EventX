@@ -25,7 +25,7 @@ public:
 };
 ```
 The eventX::Event class must be inheritated and the getType always needs to return its parent type.
-Use the *Type::fromEvent(this)* static function to determine you user defined event's type.
+Use the *Type::fromEvent(this)* static function to determine your user defined event's type.
 
 ## Creating own eventlistener
 

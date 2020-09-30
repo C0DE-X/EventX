@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
 
 include_directories(${CMAKE_SOURCE_DIR}/../eventX/include)
-link_directories(${CMAKE_SOURCE_DIR}/../eventX/lib)
+link_directories(${CMAKE_SOURCE_DIR}/../eventX/build/lib)
 
 add_executable(sample
     main.cpp

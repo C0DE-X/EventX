@@ -28,6 +28,8 @@ Event::Type &Event::Type::operator=(Event::Type &&other) {
 
 Event::Type &Event::Type::operator+=(const Event::Type &other) {
   m_types.insert(m_types.end(), other.m_types.begin(), other.m_types.end());
+  std::sort(m_types.begin(), m_types.end());
+  m_types.erase(std::unique(m_types.begin(), m_types.end()), m_types.end());
   return *this;
 }
 
@@ -57,4 +59,4 @@ std::vector<std::type_index>::iterator Event::Type::end() {
   return m_types.end();
 }
 
-}  // namespace eventX
+} // namespace eventX

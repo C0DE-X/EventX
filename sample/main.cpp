@@ -10,9 +10,7 @@ public:
   TestEvent() : eventX::Event() {}
   ~TestEvent() override = default;
 
-  eventX::Event::Type getType() override {
-    return Type::fromEvent(this) + eventX::Event::getType();
-  }
+  EVENTTYPE(TestEvent, eventX::Event)
 };
 
 class Testlistener1 : public eventX::EventListener<eventX::Event> {
@@ -62,7 +60,7 @@ int main() {
 
   timer.setTimeout(
       [&eventBus]() {
-        std::cout << "Timmer got triggered!\n";
+        std::cout << "Timer got triggered!\n";
         eventBus.push(std::make_shared<TestEvent>());
       },
       std::chrono::seconds(3), 5);
