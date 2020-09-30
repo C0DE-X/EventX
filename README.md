@@ -19,9 +19,7 @@ public:
   CustomEvent() : eventX::Event() {}
   ~CustomEvent() override = default;
 
-  eventX::Event::Type getType() override {
-    return Type::fromEvent(this) + eventX::Event::getType();
-  }
+  EVENTTYPE(CustomEvent, eventX::Event)
 };
 ```
 The eventX::Event class must be inheritated and the getType always needs to return its parent type.
